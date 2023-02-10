@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<!-- Created By CodingNepal - www.codingnepalweb.com -->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<meta http-equiv="refresh" content="30">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!------<title> Website Layout | CodingLab</title>------>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+   </head>
+<body>
+ 
+ 
+ <div class="w3-top">
+  <div class="w3-container w3-bar  w3-black w3-large">
+    <div class="w3-container w3-display-left">
+      <img src='images\logo.png' alt='Indian Institute of Technology Patna'>
+    </div>
+    <a href="https://www.iitp.ac.in/" class="w3-bar-item w3-button w3-right w3-padding-32">IIT Patna</a>
+    <a href="index.html#contact" class="w3-bar-item w3-button w3-right w3-padding-32">Contact</a>
+    <a href="index.html#ref" class="w3-bar-item w3-button w3-right w3-padding-32">References</a>
+    <a href="index.html#exp_1" class="w3-bar-item w3-button w3-right w3-padding-32">Experiments</a>
+    <a href="index.html#" class="w3-bar-item w3-button w3-right w3-padding-32">Home</a>
+  </div>
+ </div>
+ <br id="home_1"><br><br><br>
+ <div class="w3-container">
+  <h2><b>Four Bar Linkage Configurations</b></h2>
+
+  <div class="w3-bar w3-black w3-large">
+    <button class="w3-bar-item w3-button tablink w3-grey" onclick="openCity(event,'Theory')">THEORY</button>
+    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Procedure')">PROCEDURE</button>
+    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Simulation')">SIMULATION</button>
+    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Videos')">VIDEOS</button>
+  </div>
+  
+  <div id="Theory" class="w3-container w3-border topic">
+    <br>
+    <h2 style="font-size:30px"> Theory </h2>
+    <div class="w3-container w3-margin" style="width:100%; ">
+      <p style="font-size:25px; color:black">Learning objectives</p>
+      <p class="w3-container w3-padding" style="font-size:20px; color:grey">After completing simulation experiments on fourbar Grashof mechanism one should be able to</p>
+      <ul class="w3-container w3-panel w3-ul w3-large" style="color:grey" >
+        <li>Determine the location CG of any given link in a Grashof four bar mechanism</li>
+        <li>Determine the output link angle of a Grashof four bar mechanism for any given crank angle</li>
+        <li>Calculate the transmission angle of a given Grashof four bar mechanism at any given crank angle</li>
+        <li>Synthesize length of a Grashof four bar mechanism for a given conditions</li>
+      </ul>
+      <p style="font-size:25px; color:black">Introduction</p>
+      <p class="w3-container w3-padding" style="font-size:20px; color:grey">
+         A four bar mechanism consists of four rigid link which are linked in the form of quadrilateral by four pin joints. 
+         A link that makes complete revolution is called crank, the link opposite to the fixed link is the coupler and forth
+         link is a lever or rocker if oscillates or another crank if rotates.
+         <br>
+      </p>
+      <div class="w3-container w3-margin">
+        <div class="w3-card" style="width:60%;">
+          <img src="images\4_bar_figure.png" style="width:584px;height:290px;padding-left: 180px">
+          <div class="w3-container">
+            <h4>Figure 1: Four bar mechanism</h4>
+          </div>
+        </div>
+      </div><br><br>
+      <p style="font-size:25px; color:black">Position Analysis of Four Bar Mechanism</p><br>
+      <div class="w3-container w3-margin">
+        <div class="w3-card" style="width:70%;">
+          <img src="images\4_bar_nomenclature.png" style="width:745px;height:261px;padding-left: 130px;">
+          <div class="w3-container">
+            <h4>Figure 2: Nomenclature of four bar mechanism</h4>
+          </div>
+        </div>
+      </div><br>
+      <p class="w3-container w3-padding" style="font-size:20px;">
+        <b style="color:black;">Grashoff 's Law</b>
+        <span style="font-size:20px;color:grey;">: For a planar four bar linkage, the sum of the shortest (s) and 
+        longest (l) links cannot be greater than the sum of the remaining (p,q) links if there is to be continuous 
+        relative rotation between two members.
+        </span>
+      </p><br>
+      <p class="w3-container w3-padding" style="font-size:20px;">
+        <b style="color:black;">Inversions</b>
+        <span style="font-size:20px;color:grey;">: A mechanism has been defined above as a kinematic chain in which one of the links is fixed. From
+        the four bar mechanism, different versions of each of them can be obtained by fixing any one of
+        the links p, q, l or s. Such different versions, which can be obtained by fixing any of the different
+        links, are called its Inversions. Many a time, a particular inversion of a mechanism may give
+        rise to different mechanisms of practical utility, when the proportions of the link lengths are changed.
+        </span><br>
+        <span style="font-size:20px;color:grey;">By this principle of inversion of a fourbar chain, several useful mechanisms can be obtained.
+        Mainly there are three inversions of four bar mechanisms, which are obtained by fixing different links of the kinematic chain as shown in the figure below. They are:
+        </span>
+      </p>
+      <div class="w3-container w3-padding-left w3-margin-left" style="font-size:20px;color:grey;">
+        <ol>
+          <li class="w3-padding-left w3-margin-left">Double Crank Mechanism</li>
+          <li class="w3-padding-left w3-margin-left">Crank Rocker Mechanism</li>
+          <li class="w3-padding-left w3-margin-left">Double Rocker Mechanism</li>
+        </ol>
+      </div>
+      &nbsp;&nbsp;&nbsp;
+      <div class="w3-container w3-margin">
+        <div class="w3-card" style="width:70%;">
+          <img src="images\inversions.png" style="width:745px;height:261px;padding-left: 130px;">
+          <div class="w3-container">
+            <h4>Figure 3: Inversions of Four bar mechanism</h4>
+          </div>
+        </div>
+      </div><br>
+      <p style="font-size:25px; color:black">Position Analysis of Four Bar Mechanism</p><br>
+      <div class="w3-container w3-margin">
+        <div class="w3-card" style="width:70%;">
+          <img src="images\configurations_4_bar.png" style="width:745px;height:346px;padding-left: 130px;">
+          <div class="w3-container">
+            <h4>Figure 4: Configuration of Four bar mechanism</h4>
+          </div>
+        </div>
+      </div><br>
+      <p class="w3-container w3-padding" style="font-size:20px; color:grey">
+        By using relations in geometry and trigonometry the position of any point on the four bar 
+        mechanism can be found out for a given value of input angle θ<sub>2</sub>  when the four link lengths are known 
+      </p>
+      <p class="w3-container w3-padding" style="font-size:20px; color:grey">
+        At a given value of θ<sub>2</sub>  there can be two possible configurations of the four bar mechanism as shown in above figure. The following vector loop equation can be used to define the four bar mechanism
+      </p>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="images\4_bar_eqn.png"   style="width:auto;height:auto;padding-left:300px;">
+      <p class="w3-container w3-padding" style="font-size:20px; color:grey">
+        Separating the above equation into real and imaginary parts leads to two equations which can be solved to find the value of two unknowns θ<sub>3</sub>
+        and θ<sub>4</sub>
+      </p>
+   </div>
+  </div>
+
+  <div id="Procedure" class="w3-container w3-border topic" style="display:none">
+    <br>
+    <h2 style="font-size:30px"> Procedure </h2>
+    <div class="w3-container w3-margin" style="width:100%; ">
+      <p style="font-size:25px; color:black">Aim</p>
+      <p class="w3-container w3-padding" style="font-size:20px; color:grey">To completely determine the position of four bar linkage given and thereby find out θ<sub>4</sub>  and transmission angle γ (transmission angle).</p>
+      <p style="font-size:25px; color:black">Introduction</p>
+      <p class="w3-container w3-padding" style="font-size:20px; color:grey">
+        Read the value of link lengths and the input angle θ<sub>2</sub> , then use the formulae given below to calculate the value of unknowns θ<sub>3</sub> , θ<sub>4</sub> and γ
+      </p><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="images\calculation_4_bar.png"   style="width:auto;height:auto;padding-left:220px;">
+      <p class="w3-container w3-padding" style="font-size:20px; color:grey">
+        For special cases of positioning (e.g. when two link are aligned) use simple geometry and trigonometry relations to find out the solution
+      </p>
+    </div>
+  </div>
+
+  <div id="Simulation" class="w3-container w3-border topic" style="display:none">
+    <iframe src="4barLinkage.html" width="100%" height="560"></iframe>
+    <br><br><br><br>
+  </div>
+  
+  <div id="Videos" class="w3-container w3-border topic" style="display:none">
+    <br>
+    <h2 style="font-size:30px"> Videos </h2>
+    <br>
+    <p class="w3-container w3-padding" style="font-size:20px; color:grey">NPTEL</p>
+    <a href="https://www.youtube.com/watch?v=MJeRFzs4oRU&list=PLBEA57F7E7560C8E8">
+      <p class="w3-container w3-padding" style="font-size:20px; color:grey">
+        Kinematics of machines
+      </p>
+    </a>
+    <br>
+    <p class="w3-container w3-padding" style="font-size:20px; color:grey">
+      CRANK-CRANK MECHANISM
+      <a href="crank_crank.html">
+        <p class="w3-container w3-padding w3-margin-left" style="font-size:20px; color:grey">
+          Crank-Crank mechanism interactive visualization
+        </p>
+      </a>
+      <p class="w3-container w3-padding w3-margin-left" style="font-size:20px; color:grey">
+        <iframe class="w3-container w3-panel w3-padding w3-margin-left" width="420" height="345" src="crank_crank.mp4"></iframe>
+      </p>
+   </p>
+
+   <p class="w3-container w3-padding" style="font-size:20px; color:grey">
+      ROCKER-ROCKER MECHANISM
+      <a href="rocker_rocker.html">
+        <p class="w3-container w3-padding w3-margin-left" style="font-size:20px; color:grey">
+          Rocker-Rocker mechanism interactive visualization
+        </p>
+      </a>
+      <p class="w3-container w3-padding w3-margin-left" style="font-size:20px; color:grey">
+        <iframe class="w3-container w3-panel w3-padding w3-margin-left" width="420" height="345" src="rocker_rocker.mp4"></iframe>
+      </p>
+   </p>
+   <p class="w3-container w3-padding" style="font-size:20px; color:grey">
+      CRANK-ROCKER MECHANISM
+      <a href="crank_rocker.html">
+        <p class="w3-container w3-padding w3-margin-left" style="font-size:20px; color:grey">
+          Crank-Rocker mechanism interactive visualization
+        </p>
+      </a>
+      <p class="w3-container w3-padding w3-margin-left" style="font-size:20px; color:grey">
+        <iframe class="w3-container w3-panel w3-padding w3-margin-left" width="420" height="345" src="crank_rocker.mp4"></iframe>
+      </p>
+   </p>
+   <p class="w3-container w3-padding" style="font-size:20px; color:grey">
+      ROCKER-CRANK MECHANISM
+      <a href="rocker_crank.html">
+        <p class="w3-container w3-padding w3-margin-left" style="font-size:20px; color:grey">
+          Rocker-Crank mechanism interactive visualization
+        </p>
+      </a>
+      <p class="w3-container w3-padding w3-margin-left" style="font-size:20px; color:grey">
+        <iframe class="w3-container w3-panel w3-padding w3-margin-left" width="420" height="345" src="rocker_crank.mp4"></iframe>
+      </p>
+   </p>
+  </div>
+ </div>
+ 
+ <footer id="navbar" class="w3-center w3-black w3-padding">
+    <a href="#home_1" ><i class="w3-xxlarge fa fa-home"></i></a>
+ </footer>
+
+ <script>
+   function openCity(evt, topicName) {
+     var i, x, tablinks;
+     x = document.getElementsByClassName("topic");
+     for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";
+   }
+   tablinks = document.getElementsByClassName("tablink");
+   for (i = 0; i < x.length; i++) {
+     tablinks[i].className = tablinks[i].className.replace(" w3-grey", "");
+   }
+   document.getElementById(topicName).style.display = "block";
+   evt.currentTarget.className += " w3-grey";
+  }
+ </script>
+</body>
+</html>

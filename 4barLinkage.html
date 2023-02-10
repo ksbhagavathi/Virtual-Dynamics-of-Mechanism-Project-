@@ -1,0 +1,904 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Four Bar Linkage</title>
+    <script src="processing.js" type="text/javascript"></script>   
+  </head>
+
+  <body>
+  
+          <div><table width="100%" height="100%" border="1" collapse=true>
+
+          <tr><th align="center">Simulation</th><th align="center">Parameters</th></tr>
+          <tr><td width="80%" height="100%" align="center"><p><script type="application/processing">
+          int frame=0;
+          //float Cx = 150;
+          //float Cy = 200;
+          float Cx = 210;
+          float Cy = 200;
+          int a; //crank
+          int b; // bar
+          int c; // rocker
+          int numFrames=360;
+          int d; // frame
+          int a0=0,b0=0,c0=0,d0=0;
+          int x0,y0;
+          int frameInc = 2;
+
+          PFont font;
+
+          void setup()
+          {
+            //size(600, 400);
+            size(930, 400);
+            num = height/15;
+            handles = new Handle[4];
+            int hsize = 10;
+
+            smooth();
+            font = createFont("fantasy");
+            textFont(font,14);
+
+            handles[0] = new Handle(400, 10+0*15, 120, 10, handles,"a",255,0,0);
+            handles[1] = new Handle(400, 10+1*15, 120, 10, handles,"b",0,255,0);
+            handles[2] = new Handle(400, 10+2*15, 120, 10, handles,"c",0,0,255);
+            handles[3] = new Handle(400, 10+3*15, 100, 10, handles,"d",0,0,0);
+          }
+
+          void setConfig(int val1, int val2, int val3, int val4) 
+          {
+            
+            handles[0].length=val1;
+            handles[1].length=val2;
+            handles[2].length=val3;
+            handles[3].length=val4;
+
+          }
+
+          void draw()
+          {
+            a = handles[0].length; //crank
+            b = handles[1].length; // bar
+            c = handles[2].length; // rocker
+            d = handles[3].length; // frame
+            frame += frameInc;
+            if(frame<0)
+              frame += nsteps;
+            frame %= nsteps;
+            background(223,225,253);
+            for(int i=0; i<handles.length; i++) 
+            {
+              handles[i].update();
+              //handles[i].display();
+            }
+
+            drawStats();
+            drawConfigSpace();
+            drawLocus2();
+            drawBars2();
+          }
+
+          void drawStats() 
+          {
+            fill(0);
+            textFont(font,18);
+            //text("Four Bar Linkages",15,20);
+            textFont(font,15);
+            int T1 =(b+d -a-c);
+            //text("T1  "+T1,15,45);
+            int T2=(c+d -a-b);
+            //text("T2  "+T2,15,60);
+            int T3=(b+c -a-d);
+            int T3b=(a+d -b-c);
+            //text("T3  "+T3,15,75);
+
+            int s = a;
+            int l = a;
+            s = b < s ? b : s;
+            l = b > l ? b : l;
+            s = c < s ? c : s;
+            l = c > l ? c : l;
+            s = d < s ? d : s;
+            l = d > l ? d : l;
+ 
+            //text("GH  "+(a+b+c+d-2*s-2*l),15,90);
+
+            if(T1 < 0 && T2 < 0 && T3 < 0) {
+              text("Type: 0-Rocker, 0-Rocker",0,45);  // 0 in place of 80
+            }
+            if(T1 < 0 && T2 < 0 && T3 > 0) {
+              text("Type: Crank, Crank",0,45);
+            }
+            if(T1 < 0 && T2 > 0 && T3 < 0) {
+              text("Type: Rocker, Rocker",0,45);
+            }
+            if(T1 < 0 && T2 > 0 && T3 > 0) {
+              text("Type: pi-Rocker, pi-Rocker",0,45);
+            }
+            if(T1 > 0 && T2 < 0 && T3 < 0) {
+              text("Type: Rocker, Crank",0,45);
+            }
+            if(T1 > 0 && T2 < 0 && T3 > 0) {
+              text("Type: pi-Rocker, 0-Rocker",0,45);
+            }
+            if(T1 > 0 && T2 > 0 && T3 < 0) {
+              text("Type: 0-Rocker, pi-Rocker",0,45);
+            }
+            if(T1 > 0 && T2 > 0 && T3 > 0) {
+              text("Type: Crank, Rocker",0,45);
+            }
+          }
+
+          void drawConfigSpace() 
+          {
+            if(a==a0 && b==b0 && c==c0 && d==d0) {
+              return;
+            }
+
+            frame=0;
+            a0=a; b0=b; c0=c;d0=d;
+            x0=-1; y0=-1;
+            findStart();
+            follow2();
+          }
+
+          // find the starting point for zero following
+          void findStart() 
+          {
+            float Sx = Cx+d;
+            float Sy = Cy;
+            for(int i=0;i<360;++i) {
+              float th=i*PI/180.0;
+
+              // lhs crank
+              float Px = Cx+a*cos(th);
+              float Py = Cy+a*sin(th);
+
+              // len from P to S
+              float l = sqrt((Px-Sx)*(Px-Sx)+(Py-Sy)*(Py-Sy));
+    
+              if(l<=b+c && l>= b-c && l>=c-b) {
+                float alpha = (l*l+b*b-c*c)/(2*l);
+                float beta = sqrt(b*b-alpha*alpha);
+                float Mx = Px+alpha * (Sx-Px)/l;
+                float My = Py+alpha * (Sy-Py)/l;
+                float Qx = Mx + beta * (Sy-Py)/l;
+                float Qy = My - beta * (Sx-Px)/l;
+      
+                float phi = atan2(Qy-Sy,Qx-Sx);
+                int j = (int) degrees(phi);
+                j = (j+360)%360;
+                float ln=lenMinusB(i,j-1),l0=lenMinusB(i,j),lp=lenMinusB(i,j+1);
+      
+                if(ln<0 && l0>0) {
+ 	                x0=i; y0=j; dir0=1;       
+                  break;
+                } else if(ln>0 && l0<0) {
+                  x0=i; y0=(j-1+360)%360; dir0=3;
+                  break;
+                } else if(l0<0 && lp>0) {
+                  x0=i; y0=(j+1+360)%360; dir0=1;
+                  break;
+                } else if(l0>0 && lp<0) {
+                  x0=i; y0=j; dir0=3;
+                  break;
+                }
+              }
+            }
+          }
+
+          float lenMinusB(int i,int j) {
+            float Sx = Cx+d;
+            float Sy = Cy;
+            float th=i*PI/180.0;
+            float phi=j*PI/180.0;
+            // lhs crank
+            float Px = Cx+a*cos(th);
+            float Py = Cy+a*sin(th);
+            // lhs crank
+            float Rx = Sx+c*cos(phi);
+            float Ry = Sy+c*sin(phi);
+            float len = sqrt((Px-Rx)*(Px-Rx)+(Py-Ry)*(Py-Ry));
+            return len-b;
+          }
+
+          int dir=0;
+          int x=x0, y=y0;
+          int[] xa = new int[3000];
+          int[] ya = new int[3000];
+          int nsteps=1;
+          // min and max in ranges 0-180, 180-360
+          int xmin0,xmax0,ymin0,ymax0;
+          int xminPI,xmaxPI,yminPI,ymaxPI;
+
+          void follow2() 
+          {
+            //println("follow2");
+            x=x0; y=y0; dir=dir0;
+            if(x<180) { xmin0=x; xmax0=x; xminPI=359; xmaxPI=180; }
+            else      { xmin0=179; xmax0=0; xminPI=x; xmaxPI=x; }
+            if(y<180) { ymin0=y; ymax0=y; yminPI=359; ymaxPI=180; }
+            else      { ymin0=179; ymax0=0; yminPI=y; ymaxPI=y; }
+
+            //println("follow start "+x0+" "+y0+" "+dir);
+            nsteps=0;
+            xa[nsteps]=x; ya[nsteps]=y;
+            for(int i=0;i<3000;++i) {
+              increment2();
+              if(x != xa[nsteps] || y != ya[nsteps] ){
+	             ++nsteps;
+                xa[nsteps]=x; ya[nsteps]=y;
+                if(x<180) {
+                  xmin0 = x < xmin0 ? x : xmin0;
+                  xmax0 = x > xmax0 ? x : xmax0;
+                } else {
+                  xminPI = x < xminPI ? x : xminPI;
+                  xmaxPI = x > xmaxPI ? x : xmaxPI;
+                }
+                if(y<180) {
+                  ymin0 = y < ymin0 ? y : ymin0;
+                  ymax0 = y > ymax0 ? y : ymax0;
+                } else {
+                  yminPI = y < yminPI ? y : yminPI;
+                  ymaxPI = y > ymaxPI ? y : ymaxPI;
+                }
+            }
+            //println("x "+x+" "+y+" "+dir);
+            if(x==x0 && y==y0 && dir==dir0) {
+	           ++nsteps;
+              break;
+            }
+          }
+        }
+
+        // 650 in place of 400
+        void drawLocus2() 
+        {
+          float Sx = Cx+d;
+          float Sy = Cy;
+          fill(0);
+          text("Configuration space",650,95);
+          stroke(0);
+          noFill();
+          rect(650,100,360/2,360/2);
+          strokeWeight(1);
+          for(int i=0;i<nsteps;++i) {
+            x=xa[i]; y=ya[i];
+            stroke(0,255,0);
+            ellipse(650+x/2,280-y/2,1,1);
+            ellipse(650+360/2-x/2,100+y/2,1,1);
+            float th=x*PI/180.0;
+            float phi=y*PI/180.0;
+            // lhs crank
+            float Px = Cx+a*cos(th);
+            float Py = Cy+a*sin(th);
+            // lhs crank
+            float Rx = Sx+c*cos(phi);
+            float Ry = Sy+c*sin(phi);
+            stroke(0,255,0);
+            ellipse((Px+Rx)/2,2*Cy-(Py+Ry)/2,1,1);
+          } // end loop
+
+          noFill();
+          stroke(255,0,0);
+          if(xmin0<xmax0) {
+            arc(Cx,Cy,2*a,2*a,xmin0*PI/180,xmax0*PI/180);
+            arc(Cx,Cy,2*a,2*a,2*PI-xmax0*PI/180,2*PI-xmin0*PI/180);
+          }
+          if(xminPI<xmaxPI) {
+            arc(Cx,Cy,2*a,2*a,xminPI*PI/180,xmaxPI*PI/180);
+            arc(Cx,Cy,2*a,2*a,2*PI-xmaxPI*PI/180,2*PI-xminPI*PI/180);
+          }
+          stroke(0,0,255);
+          if(ymin0<ymax0) {
+            arc(Sx,Sy,2*c,2*c,ymin0*PI/180,ymax0*PI/180);
+            arc(Sx,Sy,2*c,2*c,2*PI-ymax0*PI/180,2*PI-ymin0*PI/180);
+          }
+          if(yminPI<ymaxPI) {
+            arc(Sx,Sy,2*c,2*c,yminPI*PI/180,ymaxPI*PI/180);
+            arc(Sx,Sy,2*c,2*c,2*PI-ymaxPI*PI/180,2*PI-yminPI*PI/180);
+          }
+        strokeWeight(1);
+      }
+
+      void drawBars2() 
+      {
+        float Sx = Cx+d;
+        float Sy = Cy;
+        int i=frame; 
+        i = i % nsteps;
+        x=xa[i]; y=ya[i];
+        stroke(0);
+        fill(0);
+        ellipse(650+x/2,280-y/2,8,8);
+
+        float th=x*PI/180.0;
+        float phi=y*PI/180.0;
+        // lhs crank
+        float Px = Cx+a*cos(th);
+        float Py = Cy+a*sin(th);
+        // lhs crank
+        float Rx = Sx+c*cos(phi);
+        float Ry = Sy+c*sin(phi);
+
+        stroke(0);
+        strokeWeight(4);
+        line(Cx,Cy,Sx,Sy);
+        stroke(255,0,0);
+        line(Cx,Cy,Px,2*Cy-Py);
+        stroke(0,255,0);
+    
+        line(Px,2*Cy-Py,Rx,2*Cy-Ry);
+        stroke(0,0,255);
+        line(Rx,2*Cy-Ry,Sx,Sy);
+    
+        strokeWeight(1);
+        stroke(0);
+        fill(0);
+        ellipse(Cx,Cy,4,4);
+        ellipse(Px,2*Cy-Py,4,4);
+        ellipse(Rx,2*Cy-Ry,4,4);
+        ellipse(Sx,Sy,4,4);
+
+      }
+
+      void increment2()
+      {
+        switch(dir) {
+        case 0:
+        int y1=(y+1)%360;
+        int x1=(x-1+360)%360;
+        if(lenMinusB(x1,y1)>0) {
+          if(lenMinusB(x,y1)>0) {
+            dir=1; x=x1; y=y1;
+          } else {
+            dir=3; x=x; y=y;
+          }
+        } else {
+          if(lenMinusB(x,y1)>0) {
+            dir=0; x=x; y=y1;
+          } else {
+            dir=3; x=x; y=y;
+        }
+      }
+      break;
+
+      case 1:
+        int y1=(y-1+360)%360;
+        int x1=(x-1+360)%360;
+        if(lenMinusB(x1,y1)>0) {
+          if(lenMinusB(x1,y)>0) {
+            dir=2; x=x1; y=y1;
+          } else {
+            dir=0; x=x; y=y;
+          }
+        } else {
+          if(lenMinusB(x1,y)>0) {
+            dir=1; x=x1; y=y;
+        } else {
+          dir=0; x=x; y=y;
+        }
+      }
+      break;
+
+      case 2:
+        int y1=(y-1+360)%360;
+        int x1=(x+1)%360;
+        if(lenMinusB(x1,y1)>0) {
+          if(lenMinusB(x,y1)>0) {
+            dir=3; x=x1; y=y1;
+          } else {
+            dir=1; x=x; y=y;
+          }
+        } else {
+          if(lenMinusB(x,y1)>0) {
+            dir=2; x=x; y=y1;
+          } else {
+            dir=1; x=x; y=y;
+          }
+        }
+        break;
+
+        case 3:
+          int y1=(y+1)%360;
+          int x1=(x+1)%360;
+          if(lenMinusB(x1,y1)>0) {
+            if(lenMinusB(x1,y)>0) {
+              dir=0; x=x1; y=y1;
+            } else {
+              dir=2; x=x; y=y;
+            }
+          } else {
+            if(lenMinusB(x1,y)>0) {
+              dir=3; x=x1; y=y;
+            } else {
+            dir=2; x=x; y=y;
+          }
+        }
+        break;
+      } // end switch
+    }
+
+    void mouseReleased() 
+    {
+      for(int i=0; i<handles.length; i++) {
+        handles[i].release();
+      }
+    }
+
+    class Handle
+    {
+      int x, y;
+      int boxx, boxy;
+      int length;
+      int size;
+      boolean isOver;
+      boolean isPress;
+      boolean locked = false;
+      boolean otherslocked = false;
+      Handle[] others;
+      String label;
+      int r,g,b;
+      Handle(int ix, int iy, int il, int is, Handle[] o, String ilabel,ir,ig,ib)
+      {
+        x = ix;
+        y = iy;
+        length = il;
+        size = is;
+        boxx = x+length - size/2;
+        boxy = y - size/2;
+        others = o;
+        label=ilabel;
+        r=ir; g=ig; b=ib;
+      }
+  
+      void update() 
+      {
+        boxx = x+length;
+        boxy = y - size/2;
+    
+        for(int i=0; i<others.length; i++) {
+          if(others[i].locked == true) {
+            otherslocked = true;
+            break;
+          } else {
+            otherslocked = false;
+          }  
+        }
+    
+        if(otherslocked == false) {
+          over();
+          press();
+        }
+    
+        if(isPress) {
+          length = lock(mouseX-x-size/2, 0, x-size-1);
+        }
+      }
+  
+      void over()
+      {
+        if(overRect(boxx, boxy, size, size)) {
+          isOver = true;
+        } else {
+          isOver = false;
+        }
+      }
+  
+      void press()
+      {
+        if(isOver && mousePressed || locked) {
+          isPress = true;
+          locked = true;
+        } else {
+          isPress = false;
+        }
+      }
+  
+      void release()
+      {
+        locked = false;
+      }
+  
+      void display() 
+      {
+        stroke(r,g,b);
+        line(x, y, x+length, y);
+        fill(255);
+        stroke(0);
+        rect(boxx, boxy, size, size);
+        if(isOver || isPress) {
+          line(boxx, boxy, boxx+size, boxy+size);
+          line(boxx, boxy+size, boxx+size, boxy);
+        }
+        fill(0);
+        text(label+"  "+length,x-50,y+5);
+      }
+    }
+
+    boolean overRect(int x, int y, int width, int height) 
+    {
+      if (mouseX >= x && mouseX <= x+width && 
+        mouseY >= y && mouseY <= y+height) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    int lock(int val, int minv, int maxv) 
+    { 
+      return  min(max(val, minv), maxv); 
+    }
+
+    void setSpeed(int val) {
+      frameInc = val;
+    }
+
+    </script>
+    
+    <canvas id="sketch" height="200" width="200" ></canvas></p>
+
+    <p>
+
+      <button style="background-color:darkolivegreen; border-color:blue; color:white" onclick="showConfig(1);">Crank, Crank</button>
+      <button style="background-color:darkolivegreen; border-color:blue; color:white" onclick="showConfig(2);">Crank, Rocker</button>
+      <button style="background-color:darkolivegreen; border-color:blue; color:white" onclick="showConfig(3);">Rocker, Crank</button>
+      <button style="background-color:darkolivegreen; border-color:blue; color:white" onclick="showConfig(4);">Rocker, Rocker</button>
+      <button style="background-color:darkolivegreen; border-color:blue; color:white" onclick="showConfig(5);">0-Rocker, 0-Rocker</button>
+      <button style="background-color:darkolivegreen; border-color:blue; color:white" onclick="showConfig(6);">pi-Rocker, pi-Rocker</button>
+      <button style="background-color:darkolivegreen; border-color:blue; color:white" onclick="showConfig(7);">pi-Rocker, 0-Rocker</button>
+      <button style="background-color:darkolivegreen; border-color:blue; color:white" onclick="showConfig(8);">0-Rocker, pi-Rocker</button>
+
+    </p>
+
+    </td>
+          <td valign="top" width="20%" height="100%">
+                <p id="c_ip"><b>&nbsp;&nbsp;&nbsp;&nbsp;INPUT</b></p>
+                <label for="speed">&nbsp;&nbsp;&nbsp;&nbsp;Speed: </label><input type="number" id="speedControl" value="2" min="-5" max="5" 
+                size="4" onchange="setSpeed()"></br></br>
+                <label for="a">&nbsp;&nbsp;&nbsp;&nbsp;a: </label><input type="range" id="a" min="0" max="193" step="1" oninput="DisplayChangeA(this.value)"><p style="display:inline" id="a_op"></p></br>
+                <label for="b">&nbsp;&nbsp;&nbsp;&nbsp;b: </label><input type="range" id="b" min="0" max="193" step="1" oninput="DisplayChangeB(this.value)"><p style="display:inline" id="b_op"></p></br>
+                <label for="c">&nbsp;&nbsp;&nbsp;&nbsp;c: </label><input type="range" id="c" min="0" max="193" step="1" oninput="DisplayChangeC(this.value)"><p style="display:inline" id="c_op"></p></br>
+                <label for="d">&nbsp;&nbsp;&nbsp;&nbsp;d: </label><input type="range" id="d" min="0" max="193" step="1" oninput="DisplayChangeD(this.value)"><p style="display:inline" id="d_op"></p></br>
+
+                <p id="op"><b>&nbsp;&nbsp;&nbsp;&nbsp;OUTPUT</b></p>
+                <p id="t1">&nbsp;&nbsp;&nbsp;&nbsp;T1: </p>
+                <p id="t2">&nbsp;&nbsp;&nbsp;&nbsp;T2: </p>
+                <p id="t3">&nbsp;&nbsp;&nbsp;&nbsp;T3: </p>
+                <!--<p id="t4">&nbsp;&nbsp;&nbsp;&nbsp;T4: </p>-->
+                <p id="gh">&nbsp;&nbsp;&nbsp;&nbsp;GH: </p>
+          </td>
+        </tr>
+    </table>
+    </div>
+    
+    <br>
+
+      <script type="application/javascript">
+
+        var processingInstance;
+
+          document.getElementById("a").value=120;
+          document.getElementById("a_op").innerHTML="120";
+          document.getElementById("b").value=120;
+          document.getElementById("b_op").innerHTML="120";
+          document.getElementById("c").value=120;
+          document.getElementById("c_op").innerHTML="120";
+          document.getElementById("d").value=100;
+          document.getElementById("d_op").innerHTML="100";
+
+          showConfig(1);
+
+          function DisplayChangeA(newvalue) {
+            document.getElementById("a_op").innerHTML = "" + newvalue;
+            setConfig();
+          }
+
+          function DisplayChangeB(newvalue) {
+            document.getElementById("b_op").innerHTML = "" + newvalue;
+            setConfig();
+          }
+
+          function DisplayChangeC(newvalue) {
+            document.getElementById("c_op").innerHTML = "" + newvalue;
+            setConfig();
+          }
+
+          function DisplayChangeD(newvalue) {
+            document.getElementById("d_op").innerHTML = "" + newvalue;
+            setConfig();
+          }
+
+          function showConfig(n) 
+          {
+
+            if(n==1)
+            {
+        
+              document.getElementById("a").value=120;
+              document.getElementById("a_op").innerHTML="120";
+              document.getElementById("b").value=120;
+              document.getElementById("b_op").innerHTML="120";
+              document.getElementById("c").value=120;
+              document.getElementById("c_op").innerHTML="120";
+              document.getElementById("d").value=100;
+              document.getElementById("d_op").innerHTML="100";
+            
+              setConfig();    
+            }
+            if(n==2)
+            {
+              
+              document.getElementById("a").value=80;
+              document.getElementById("a_op").innerHTML="80";
+              document.getElementById("b").value=120;
+              document.getElementById("b_op").innerHTML="120";
+              document.getElementById("c").value=120;
+              document.getElementById("c_op").innerHTML="120";
+              document.getElementById("d").value=100;
+              document.getElementById("d_op").innerHTML="100";
+              
+              setConfig(); 
+            }
+            if(n==3)
+            {
+              
+              document.getElementById("a").value=120;
+              document.getElementById("a_op").innerHTML="120";
+              document.getElementById("b").value=120;
+              document.getElementById("b_op").innerHTML="120";
+              document.getElementById("c").value=80;
+              document.getElementById("c_op").innerHTML="80";
+              document.getElementById("d").value=100;
+              document.getElementById("d_op").innerHTML="100";
+              
+              setConfig();
+            }
+            if(n==4)
+            {
+              
+              document.getElementById("a").value=120;
+              document.getElementById("a_op").innerHTML="120";
+              document.getElementById("b").value=80;
+              document.getElementById("b_op").innerHTML="80";
+              document.getElementById("c").value=120;
+              document.getElementById("c_op").innerHTML="120";
+              document.getElementById("d").value=100;
+              document.getElementById("d_op").innerHTML="100";
+              
+              setConfig();
+            }
+            if(n==5)
+            {
+              
+              document.getElementById("a").value=120;
+              document.getElementById("a_op").innerHTML="120";
+              document.getElementById("b").value=80;
+              document.getElementById("b_op").innerHTML="80";
+              document.getElementById("c").value=80;
+              document.getElementById("c_op").innerHTML="80";
+              document.getElementById("d").value=100;
+              document.getElementById("d_op").innerHTML="100";
+              
+              setConfig();
+            }
+            if(n==6)
+            {
+              
+              document.getElementById("a").value=80;
+              document.getElementById("a_op").innerHTML="80";
+              document.getElementById("b").value=80;
+              document.getElementById("b_op").innerHTML="80";
+              document.getElementById("c").value=120;
+              document.getElementById("c_op").innerHTML="120";
+              document.getElementById("d").value=100;
+              document.getElementById("d_op").innerHTML="100";
+              
+              setConfig();
+            }
+            if(n==7)
+            {
+              
+              document.getElementById("a").value=80;
+              document.getElementById("a_op").innerHTML="80";
+              document.getElementById("b").value=120;
+              document.getElementById("b_op").innerHTML="120";
+              document.getElementById("c").value=80;
+              document.getElementById("c_op").innerHTML="80";
+              document.getElementById("d").value=100;
+              document.getElementById("d_op").innerHTML="100";
+              
+              setConfig();
+            }
+            if(n==8)
+            {
+              
+              document.getElementById("a").value=80;
+              document.getElementById("a_op").innerHTML="80";
+              document.getElementById("b").value=80;
+              document.getElementById("b_op").innerHTML="80";
+              document.getElementById("c").value=80;
+              document.getElementById("c_op").innerHTML="80";
+              document.getElementById("d").value=100;
+              document.getElementById("d_op").innerHTML="100";
+              
+              setConfig();
+            }
+              
+          }
+
+          function updateValues(a,b,c,d)
+          {
+            
+            var T1=(b+d -a-c);
+            var T2=(c+d -a-b);
+            var T3=(b+c -a-d);
+
+            var s = a;
+            var l = a;
+            s = b < s ? b : s;
+            l = b > l ? b : l;
+            s = c < s ? c : s;
+            l = c > l ? c : l;
+            s = d < s ? d : s;
+            l = d > l ? d : l;
+ 
+            var GH=(a+b+c+d-2*s-2*l);
+
+            document.getElementById("t1").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;T1: " + T1;
+            document.getElementById("t2").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;T2: " + T2;
+            document.getElementById("t3").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;T3: " + T3;
+            document.getElementById("gh").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;GH: " + GH;
+
+          }
+
+          
+          function setConfig() 
+          {
+            
+            if (!processingInstance) {
+              processingInstance = Processing.getInstanceById('sketch');
+            }
+
+            var ac = document.getElementById('a');
+            var val1 = Number(ac.value);
+
+            var bc = document.getElementById('b');
+            var val2 = Number(bc.value);
+
+            var cc = document.getElementById('c');
+            var val3 = Number(cc.value);
+
+            var dc = document.getElementById('d');
+            var val4 = Number(dc.value);
+
+            updateValues(val1,val2,val3,val4);
+
+            // call Processing loop() function
+            processingInstance.setConfig(val1,val2,val3,val4);
+
+            
+  
+          }
+ 
+          function setSpeed() {
+            var sc = document.getElementById('speedControl');
+            var val = Number(sc.value);
+            if (!processingInstance) {
+              processingInstance = Processing.getInstanceById('sketch');
+            }
+            processingInstance.setSpeed(val);  
+          }
+        </script>        
+        
+      </body>
+      <style>
+        table,th,td{border:3px solid green; border-collapse:collapse;}
+
+        @media screen and (-webkit-min-device-pixel-ratio:0) {
+          input[id='a'] {
+            overflow: hidden;
+            width: 180px;
+            -webkit-appearance: none;
+            background-color: lightgrey;
+          }
+    
+          input[id='a']::-webkit-slider-runnable-track {
+            height: 8px;
+            -webkit-appearance: none;
+            margin-top: 0px;
+            border: 4px;
+            border-color: red;
+          }
+    
+          input[id='a']::-webkit-slider-thumb {
+            width: 15px;
+            height: 8px;
+            border: 2px solid orange;
+            cursor: arrow;
+            background: white;
+            -webkit-appearance: none;
+            box-shadow: -80px 0 0 80px red;
+          }
+
+          input[id='b'] {
+            overflow: hidden;
+            width: 180px;
+            -webkit-appearance: none;
+            background-color: lightgrey;
+          }
+    
+          input[id='b']::-webkit-slider-runnable-track {
+            height: 8px;
+            -webkit-appearance: none;
+            margin-top: 0px;
+            border: 4px;
+            border-color: red;
+          }
+    
+          input[id='b']::-webkit-slider-thumb {
+            width: 15px;
+            height: 8px;
+            border: 2px solid orange;
+            cursor: arrow;
+            background: white;
+            -webkit-appearance: none;
+            box-shadow: -80px 0 0 80px #90ff81;
+          }
+          input[id='c'] {
+            overflow: hidden;
+            width: 180px;
+            -webkit-appearance: none;
+            background-color: lightgrey;
+          }
+    
+          input[id='c']::-webkit-slider-runnable-track {
+            height: 8px;
+            -webkit-appearance: none;
+            margin-top: 0px;
+            border: 4px;
+            border-color: red;
+          }
+    
+          input[id='c']::-webkit-slider-thumb {
+            width: 15px;
+            height: 8px;
+            border: 2px solid orange;
+            cursor: arrow;
+            background: white;
+            -webkit-appearance: none;
+            box-shadow: -80px 0 0 80px blue;
+          }
+
+          input[id='d'] {
+            overflow: hidden;
+            width: 180px;
+            -webkit-appearance: none;
+            background-color: lightgrey;
+          }
+    
+          input[id='d']::-webkit-slider-runnable-track {
+            height: 8px;
+            -webkit-appearance: none;
+            margin-top: 0px;
+            border: 4px;
+            border-color: red;
+          }
+    
+          input[id='d']::-webkit-slider-thumb {
+            width: 15px;
+            height: 8px;
+            border: 2px solid orange;
+            cursor: arrow;
+            background: white;
+            -webkit-appearance: none;
+            box-shadow: -80px 0 0 80px black;
+          }
+        }     
+      </style>
+</html>

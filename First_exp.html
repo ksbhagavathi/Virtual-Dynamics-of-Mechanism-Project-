@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<!-- Created By CodingNepal - www.codingnepalweb.com -->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<meta http-equiv="refresh" content="30">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!------<title> Website Layout | CodingLab</title>------>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+   </head>
+<body>
+ 
+ 
+ <div class="w3-top">
+  <div class="w3-container w3-bar  w3-black w3-large">
+    <div class="w3-container w3-display-left">
+      <img src='images\logo.png' alt='Indian Institute of Technology Patna'>
+    </div>
+    <a href="https://www.iitp.ac.in/" class="w3-bar-item w3-button w3-right w3-padding-32">IIT Patna</a>
+    <a href="index.html#contact" class="w3-bar-item w3-button w3-right w3-padding-32">Contact</a>
+    <a href="index.html#ref" class="w3-bar-item w3-button w3-right w3-padding-32">References</a>
+    <a href="index.html#exp_1" class="w3-bar-item w3-button w3-right w3-padding-32">Experiments</a>
+    <a href="index.html#" class="w3-bar-item w3-button w3-right w3-padding-32">Home</a>
+  </div>
+ </div>
+ <br  id="home_1"><br><br><br>
+ <div class="w3-container">
+  <h2><b>Crank Slider Mechanism</b></h2>
+
+  <div class="w3-bar w3-black w3-large">
+    <button class="w3-bar-item w3-button tablink w3-grey" onclick="openCity(event,'Theory')">THEORY</button>
+    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Procedure')">PROCEDURE</button>
+    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Simulation')">SIMULATION</button>
+    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Videos')">VIDEOS</button>
+  </div>
+  
+  <div id="Theory" class="w3-container w3-border topic">
+    <br>
+    <h2 style="font-size:30px"> Theory </h2>
+    <div class="w3-container w3-margin" style="width:100%; ">
+      <p style="font-size:25px; color:black">Learning objectives</p>
+      <p class="w3-container w3-padding" style="font-size:20px; color:grey">After completing simulation experiments on slider crank mechanism one should be able to</p>
+      <ul class="w3-container w3-panel w3-ul w3-large" style="color:grey" >
+        <li>Determine the location of the piston of a reciprocating engine or compressor at any given crank angle, for a given crank and connecting rod length</li>
+        <li>Determine the swing angle of connecting rod of a slider crank mechanism</li>
+        <li>Determine the minimum bore diameter required for a given l/r ratio</li>
+        <li>Explain the effect of l/r ratio</li>
+      </ul>
+      <p style="font-size:25px; color:black">Introduction</p>
+
+      <p class="w3-container w3-padding" style="font-size:20px; color:grey">
+         The slider-crank mechanism is one of the most useful mechanisms in modern technology since
+         it appears in most of the internal combustion engines including automobiles, trucks and small engines.
+         The slider-crank kinematic chain consists of four bodies linked with three cylindrical joints and one
+         sliding or prismatic joint. It is used to change circular into reciprocating motion, or reciprocating into
+         circular motion.
+         <br>
+      </p>
+      <div class="w3-container w3-margin">
+        <div class="w3-card" style="width:55%;">
+          <img src="images\crank_slider.png" style="width:654px;height:344px">
+          <div class="w3-container">
+            <h4>Figure 1: Slider Crank</h4>
+          </div>
+        </div>
+      </div><br>
+      <p style="font-size:25px; color:black">Position Analysis</p>
+      <div class="w3-container w3-margin">
+        <div class="w3-card" style="width:55%;">
+          <img src="images\crank_slider_offset.png" style="width:654px;height:344px">
+          <div class="w3-container">
+            <h4>Figure 2: Slider Crank system with offset</h4>
+          </div>
+        </div>
+      </div><br>
+      <p class="w3-container w3-padding" style="font-size:20px; color:grey">
+        Above figure shows a slider-crank mechanism in which the stroke-line of the slider
+        doesn't pass through the axis of rotation of the crank. Finding the equations for this 
+        case and substituting c=0 (that is setting link length of R <sub>4</sub> to 0)
+        will give us the equations for slider crank mechanism without offset. The equations 
+        for the general condition as given below.
+      </p>
+      <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="images\crank_slider_eqn_1.jpg"   style="194px;height:71px; position: relative; bottom: -15px;">
+      <br>
+      <br>
+      <p class="w3-container w3-padding" style="font-size:20px; color:grey">
+        and
+      </p>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="images\crank_slider_eqn_2.jpg"   style="259px;height:69px; position: relative; bottom: -15px;">
+      <br>
+      <br>
+      <br>
+      <p class="w3-container w3-align-center" style="font-size:20px; color:grey; ">
+        where
+        <img src="images\crank_slider_eqn_3.jpg"   style="146px;height:36px; position: relative;">
+        and
+        <img src="images\crank_slider_eqn_4.jpg"   style="263px;height:36px; position: relative;">
+      </p>
+
+    </div>
+
+  </div>
+
+  <div id="Procedure" class="w3-container w3-border topic" style="display:none">
+    <br>
+    <h2 style="font-size:30px"> Procedure </h2>
+    <div class="w3-container w3-margin" style="width:100%; ">
+      <ul class="w3-container w3-panel w3-ul w3-large" style="color:grey" >
+        <li>The simulation is of a slider crank mechanism without any offset i.e. the axis of sliding element passes through the crank center.</li>
+        <li>Change the parameters under variables section and observe the motion of the slider crank mechanism.</li>
+      </ul>
+    </div>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+  </div>
+
+  <div id="Simulation" class="w3-container w3-border topic" style="display:none">
+    <iframe src="crank-slider.html" width="100%" height="560"></iframe>
+    <br><br><br><br>
+  </div>
+  
+  <div id="Videos" class="w3-container w3-border topic" style="display:none">
+    <br>
+    <h2 style="font-size:30px"> Videos </h2>
+    <br>
+    <p class="w3-container w3-padding" style="font-size:20px; color:grey">NPTEL</p>
+    <a href="https://www.youtube.com/watch?v=MJeRFzs4oRU&list=PLBEA57F7E7560C8E8">
+      <p class="w3-container w3-padding" style="font-size:20px; color:grey">
+        Kinematics of machines
+      </p>
+    </a>
+    <p class="w3-container w3-padding" style="font-size:20px; color:grey">
+      CRANK-SLIDER MECHANISM
+      <p class="w3-container w3-padding w3-margin-left" style="font-size:20px; color:grey">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/2tV50W0s1sQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay;         clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </p>
+    </p>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+  </div>
+ </div>
+
+ <footer id="navbar" class="w3-center w3-black w3-padding">
+    <a href="#home_1" ><i class="w3-xxlarge fa fa-home"></i></a>
+ </footer>
+
+ <script>
+   function openCity(evt, topicName) {
+     var i, x, tablinks;
+     x = document.getElementsByClassName("topic");
+     for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";
+   }
+   tablinks = document.getElementsByClassName("tablink");
+   for (i = 0; i < x.length; i++) {
+     tablinks[i].className = tablinks[i].className.replace(" w3-grey", "");
+   }
+   document.getElementById(topicName).style.display = "block";
+   evt.currentTarget.className += " w3-grey";
+  }
+ </script>
+
+</body>
+</html>
